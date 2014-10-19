@@ -6,3 +6,7 @@ html {
   -webkit-backface-visibility: visible;
   backface-visibility: visible;
 }
+
+.inputs {
+  text-align: center;
+}

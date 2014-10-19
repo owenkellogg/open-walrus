@@ -19,7 +19,8 @@
     "watch": "watchify src/index.js -o public/bundle.js --debug --verbose",
     "lint-eslint": "eslint src/",
     "lint-jscs": "jscs src/",
-    "lint": "npm run lint-eslint && npm run lint-jscs"
+    "lint": "npm run lint-eslint && npm run lint-jscs",
+    "build:cordova": "npm run build && cp -R public/ cordova/www/"
   },
   "devDependencies": {
     "eslint": "^0.8.2",
