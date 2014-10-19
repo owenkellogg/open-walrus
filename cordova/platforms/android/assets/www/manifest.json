@@ -1,0 +1,14 @@
+{
+  "name": "Ripple Wallet Famous",
+  "description": "a digital wallet for ripple money",
+  "version": "0.1",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "content_scripts": [ {
+    "js": [ "bundle.js" ]
+  }]
+}

@@ -1,7 +1,7 @@
 {
-  "name": "browserify-seed",
+  "name": "walrus-open-wallet",
   "version": "0.3.0",
-  "description": "seed for a browserified version of famous",
+  "description": "A digital wallet for any type of value",
   "browser": "src/index.js",
   "main": "plugin.js",
   "browserify": {
@@ -20,7 +20,9 @@
     "lint-eslint": "eslint src/",
     "lint-jscs": "jscs src/",
     "lint": "npm run lint-eslint && npm run lint-jscs",
-    "build:cordova": "npm run build && cp -R public/ cordova/www/"
+    "build:cordova": "npm run build && cp -R public/ cordova/www/",
+    "cordova:run:android": "npm run build:cordova && cd cordova && cordova run android",
+    "cordova:run:ios": "npm run build:cordova && cd cordova && cordova run ios"
   },
   "devDependencies": {
     "eslint": "^0.8.2",

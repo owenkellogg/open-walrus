@@ -30,7 +30,7 @@ var inputTransitionable = new Transitionable(0);
 // your app here
 var nameLogo = new ImageSurface({
   size: [150, 75],
-  content: 'images/ripple_name.png',
+  content: 'images/open-wallet.png',
   classes: ['backfaceVisibility']
 });
 
@@ -136,13 +136,13 @@ var usernameModifier = new Modifier({
   }
 });
 
-var passwordSurface = new InputSurface({
-  classes: ['inputs', 'password'],
-  type: 'password',
-  placeholder: 'ripple trade password' 
+var submitSurface = new InputSurface({
+  classes: ['inputs', 'submit'],
+  type: 'submit',
+  value: 'Login'
 });
 
-var passwordModifier = new Modifier({
+var submitModifier = new Modifier({
   align: [0.22, 0.75],
   size: [innerWidth * 0.7, 40],
   transform: function() {
@@ -152,10 +152,6 @@ var passwordModifier = new Modifier({
     }
     return Transform.translate(-1000 * (1 - progress), 0, 0);
   }
-});
-
-var submitSurface = new InputSurface({
-  type: 'submit'
 });
 
 Timer.after(function() {
@@ -180,5 +176,5 @@ mainContext
   .add(usernameSurface);
 
 mainContext
-  .add(passwordModifier)
-  .add(passwordSurface);
+  .add(submitModifier)
+  .add(submitSurface);

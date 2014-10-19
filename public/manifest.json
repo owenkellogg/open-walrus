@@ -1,0 +1,15 @@
+{
+  "name": "Open Wallet",
+  "description": "a digital wallet for any type of value",
+  "version": "0.1",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "icons": { "16": "images/open-wallet-16.png", "128": "images/open-wallet-128.png" },
+  "content_scripts": [ {
+    "js": [ "bundle.js" ]
+  }]
+}
