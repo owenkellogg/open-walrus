@@ -153,5 +153,7 @@ view
   .add(submitModifier)
   .add(submitSurface);
 
+view.submitSurface = submitSurface;
+
 module.exports = view;
 

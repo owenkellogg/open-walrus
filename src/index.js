@@ -12,7 +12,8 @@ var RenderController = require('famous/views/RenderController');
 
 var SpringTransition = require('famous/transitions/SpringTransition');
 var SnapTransition = require('famous/transitions/SnapTransition');
-var view = require('./views/home.js');
+var homeView = require('./views/home.js');
+var balancesView = require('./views/balances.js');
 
 Transitionable.registerMethod('snap', SnapTransition);
 Transitionable.registerMethod('spring', SpringTransition);
@@ -25,5 +26,10 @@ var renderController = new RenderController();
 
 mainContext.add(renderController);
 
-renderController.show(view)
+homeView.submitSurface.on('click', function() {
+  renderController.show(balancesView);
+});
+
+
+renderController.show(homeView);
 
