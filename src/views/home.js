@@ -5,6 +5,8 @@ var Timer = require('famous/utilities/Timer');
 var Transitionable = require('famous/transitions/Transitionable');
 var Transform = require('famous/core/Transform');
 var Modifier = require('famous/core/Modifier');
+var CurrencyModal = require('./modal.js');
+var Surface = require('famous/core/Surface');
 
 var titleTransitionable = new Transitionable(0);
 var inputTransitionable = new Transitionable(0);
@@ -141,17 +143,31 @@ Timer.after(function() {
 
 var view = new View();
 
+
+var currencyModal = new CurrencyModal();
+
 view
+  .add(currencyModal);
+
+currencyModal
   .add(titleModifier)
   .add(titleLogoView);
 
-view
+currencyModal
   .add(usernameModifier)
-  .add(usernameSurface);
+  .add(usernameSurface)
 
-view
+currencyModal
   .add(submitModifier)
   .add(submitSurface);
+
+modal = currencyModal;
+
+Timer.after(function() {
+  currencyModal.show(function() {
+    console.log("showed currency modal");
+  });
+}, 1);
 
 view.submitSurface = submitSurface;
 
