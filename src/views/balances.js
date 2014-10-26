@@ -9,13 +9,30 @@ var titleLogoView = require('./title_view.js');
 
 var layout = new HeaderFooterLayout();
 
+GridLayout.prototype.getSize = function() {
+  return [undefined, undefined];
+};
+
 var grid = new GridLayout({
     dimensions: [2, 2]
 });
+var grid2 = new GridLayout({
+    dimensions: [2, 2]
+});
 
-var surfaces = [];
+var scrollView = new ScrollView({
+  groupScroll: true,
+  direction: 0,
+  speedLimit: 10
+});
 
-grid.sequenceFrom(surfaces);
+var gridSurfaces = [];
+var grid2Surfaces = [];
+
+grid.sequenceFrom(gridSurfaces);
+
+grid2.sequenceFrom(grid2Surfaces);
+scrollView.sequenceFrom([grid, grid2]);
 
 var values = [
   ['XRP', '126,377'],
@@ -25,7 +42,17 @@ var values = [
 ];
 
 for(var i = 0; i < 4; i++) {
-    surfaces.push(new Surface({
+    gridSurfaces.push(new Surface({
+        content: "<h2>"+values[i][0]+" "+values[i][1]+"</h2>",
+        size: [undefined, undefined],
+        properties: {
+            color: "#404040",
+            lineHeight: '200px',
+            textAlign: 'center',
+            border: '1px solid #ccc'
+        }
+    }));
+    grid2Surfaces.push(new Surface({
         content: "<h2>"+values[i][0]+" "+values[i][1]+"</h2>",
         size: [undefined, undefined],
         properties: {
@@ -46,7 +73,7 @@ var headerModifier = new Modifier({
 })
 
 layout.header.add(headerModifier).add(titleLogoView);
-layout.content.add(grid);
+layout.content.add(scrollView);
 
 module.exports = layout;
 
