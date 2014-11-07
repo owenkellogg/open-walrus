@@ -15,6 +15,8 @@ var SnapTransition = require('famous/transitions/SnapTransition');
 var homeView = require('./views/home.js');
 var balancesView = require('./views/balances.js');
 
+var Balances = require('./models/balances.js');
+
 Transitionable.registerMethod('snap', SnapTransition);
 Transitionable.registerMethod('spring', SpringTransition);
 
@@ -30,6 +32,29 @@ homeView.submitSurface.on('click', function() {
   renderController.show(balancesView);
 });
 
-
 renderController.show(homeView);
 
+var balances = new Balances({});
+
+balances.fetch().then(function() {
+
+  balances.models.forEach(function(balance) {
+    console.log(balance.printBalance());
+  });
+});
+
+/* ROUTER 
+
+var AppRouter = require('./router');
+var appRouter = new AppRouter();
+
+appRouter.on('route:balances', function() {
+});
+appRouter.on('route:balances', function() {
+});
+appRouter.on('route:home', function() {
+});
+appRouter.on('route:home', function() {
+});
+
+*/
