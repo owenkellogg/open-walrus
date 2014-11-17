@@ -5,7 +5,8 @@ var GridLayout = require('famous/views/GridLayout');
 var Modifier = require('famous/core/Modifier');
 var Transform = require('famous/core/Transform');
 var HeaderFooterLayout = require("famous/views/HeaderFooterLayout");
-var titleLogoView = require('./title_view.js');
+var TitleView = require('./title_view.js');
+var titleLogoView = new TitleView();
 
 var layout = new HeaderFooterLayout();
 
@@ -68,7 +69,7 @@ var headerModifier = new Modifier({
   align: [0.5, 0.5],
   origin: [0.5, 0.5],
   transform: function() {
-    return Transform.scale(1, 1, 1);
+    return Transform.scale(1, 0.2, 1);
   }
 })
 
