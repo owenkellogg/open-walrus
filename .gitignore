@@ -1,2 +1,4 @@
 public/*bundle.*
 node_modules/
+*.swo
+*.swp

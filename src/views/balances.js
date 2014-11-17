@@ -5,76 +5,81 @@ var GridLayout = require('famous/views/GridLayout');
 var Modifier = require('famous/core/Modifier');
 var Transform = require('famous/core/Transform');
 var HeaderFooterLayout = require("famous/views/HeaderFooterLayout");
+var BaseView = require('./base_view.coffee');
 var TitleView = require('./title_view.js');
-var titleLogoView = new TitleView();
-
-var layout = new HeaderFooterLayout();
+var titleView = new TitleView();
+var rerender;
 
 GridLayout.prototype.getSize = function() {
   return [undefined, undefined];
 };
 
-var grid = new GridLayout({
-    dimensions: [2, 2]
-});
-var grid2 = new GridLayout({
-    dimensions: [2, 2]
-});
+function BalancesView(options) {
+  this.collection = options.collection;
+  BaseView.call(this, options);
 
-var scrollView = new ScrollView({
-  groupScroll: true,
-  direction: 0,
-  speedLimit: 10
-});
+  this.layout =  new HeaderFooterLayout({
+    headerSize: 60,
+    footerSize: 0
+  });
 
-var gridSurfaces = [];
-var grid2Surfaces = [];
+  this.scrollView = new ScrollView({
+    groupScroll: true,
+    direction: 0,
+    speedLimit: 10
+  });
 
-grid.sequenceFrom(gridSurfaces);
+  var headerModifier = new Modifier({
+    align: [0.5, 0.5],
+    origin: [0.5, 0.5],
+    transform: function() {
+      return Transform.scale(1, 0.5, 1);
+    }
+  });
 
-grid2.sequenceFrom(grid2Surfaces);
-scrollView.sequenceFrom([grid, grid2]);
+  this.layout.header.add(headerModifier).add(titleView);
+  this.layout.content.add(this.scrollView);
 
-var values = [
-  ['XRP', '126,377'],
-  ['XAU', '6.2'],
-  ['BTC', '25.566'],
-  ['USD', '3,267']
-];
-
-for(var i = 0; i < 4; i++) {
-    gridSurfaces.push(new Surface({
-        content: "<h2>"+values[i][0]+" "+values[i][1]+"</h2>",
-        size: [undefined, undefined],
-        properties: {
-            color: "#404040",
-            lineHeight: '200px',
-            textAlign: 'center',
-            border: '1px solid #ccc'
-        }
-    }));
-    grid2Surfaces.push(new Surface({
-        content: "<h2>"+values[i][0]+" "+values[i][1]+"</h2>",
-        size: [undefined, undefined],
-        properties: {
-            color: "#404040",
-            lineHeight: '200px',
-            textAlign: 'center',
-            border: '1px solid #ccc'
-        }
-    }));
+  this.collection.on('sync', function() {
+    rerender(this.scrollView, this.collection);
+  }.bind(this));
 }
 
-var headerModifier = new Modifier({
-  align: [0.5, 0.5],
-  origin: [0.5, 0.5],
-  transform: function() {
-    return Transform.scale(1, 0.2, 1);
+function rerender(scrollView, collection) {
+  var surfaces = [];
+  var surfaceGroups = [];
+  var grids = [];
+
+  collection.models.forEach(function(balance) {
+    surfaces.push(new Surface({
+      content: "<h2>"+parseFloat(balance.get('value')).toFixed(2)+" "+balance.get('currency')+"</h2>",
+      size: [undefined, undefined],
+      properties: {
+        color: "#404040",
+        lineHeight: '200px',
+        textAlign: 'center',
+        border: '1px solid #ccc'
+      }
+    }));
+  });
+
+  while (surfaces.length) {
+    surfaceGroups.push(surfaces.splice(0,4));
   }
-})
 
-layout.header.add(headerModifier).add(titleLogoView);
-layout.content.add(scrollView);
+  surfaceGroups.forEach(function(group) {
+    var grid = new GridLayout({
+      dimensions: [2, 2]
+    });
+    grid.sequenceFrom(group);
+    grids.push(grid);
+  });
 
-module.exports = layout;
+  scrollView.sequenceFrom(grids); 
+}
+
+BalancesView.prototype = Object.create(BaseView.prototype);
+BalancesView.prototype.constructor = BalancesView;
+
+module.exports = BalancesView;
 

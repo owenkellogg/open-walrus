@@ -15,21 +15,23 @@ Transitionable.registerMethod('spring', SpringTransition);
 var AppView = require('./views/app_view');
 var appView = new AppView();
 
-var app = new RenderController();
+var app = window.app = new RenderController();
+app.balances = new Balances({});
+app.balances.fetch();
+
 var Router = require('./router')(app);
 var mainContext = Engine.createContext();
 mainContext.setPerspective(750);
 
 mainContext.add(app);
 
-var balances = new Balances({});
-balances.fetch();
-
 var router = new Router();
 
 dispatcher.register(function(payload) {
   if (payload.actionType === 'accountSelected') {
     router.navigate('/accounts/'+payload.account+'/balances', { trigger: true });
+    app.balances.set('account', payload.account);
+    app.balances.fetch();
   }
 });
 
