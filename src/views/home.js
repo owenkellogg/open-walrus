@@ -5,9 +5,9 @@ var Timer = require('famous/utilities/Timer');
 var Transitionable = require('famous/transitions/Transitionable');
 var Transform = require('famous/core/Transform');
 var Modifier = require('famous/core/Modifier');
-var Modal = require('./modal.js');
-var dispatcher = require('../dispatcher');
+var LoginModal = require('./login_modal.js');
 var TitleView = require('./title_view');
+var LoginModal = require('./login_modal');
 var BaseView = require('./base_view.coffee');
 
 function HomeView(options) {
@@ -15,7 +15,6 @@ function HomeView(options) {
   var titleView = new TitleView();
 
   var titleTransitionable = new Transitionable(0);
-  var inputTransitionable = new Transitionable(0);
 
   var titleModifier = new Modifier({
     align: [0.5, 0.5],
@@ -26,86 +25,28 @@ function HomeView(options) {
     }
   });
 
-  var usernameSurface = new InputSurface({
-    classes: ['inputs', 'username'],
-    type: 'text',
-    placeholder: 'ripple trade username'
-  });
-
-  var usernameModifier = new Modifier({
-    align: [0.1, 0.6],
-    size: [innerWidth * 0.7, 40],
-    transform: function() {
-      var progress = inputTransitionable.get();
-      if (progress < 0.5) {
-        return Transform.translate(5000, 0, 0);
-      }
-      return Transform.translate(1000 * (1 - progress), 0, 0);
-    }
-  });
-
-  var submitSurface = new InputSurface({
-    classes: ['inputs', 'submit'],
-    type: 'submit',
-    value: 'Login'
-  });
-
-  submitSurface.on('click', function() {
-    dispatcher.dispatch({
-      actionType: 'accountSelected',
-      account: 'stevenzeiler'
-    });
-  }.bind(this));
-
-  var submitModifier = new Modifier({
-    align: [0.22, 0.75],
-    size: [innerWidth * 0.7, 40],
-    transform: function() {
-      var progress = inputTransitionable.get();
-      if (progress < 0.5) {
-        return Transform.translate(-5000, 0, 0);
-      }
-      return Transform.translate(-1000 * (1 - progress), 0, 0);
-    }
-  });
-
   Timer.after(function() {
     titleTransitionable.set(1, {
       duration: 1000,
       curve: "easeOutBounce"
     });
-    inputTransitionable.set(1, {
-      method: 'spring',
-      period: 600,
-      dampingRatio: 0.4
-    });
   }, 120);
 
-  var currencyModal = new Modal();
+  var loginModal = new LoginModal();
 
-  this.add(currencyModal);
+  this.add(loginModal);
 
-  currencyModal
+  loginModal
     .add(titleModifier)
     .add(titleView);
 
-  currencyModal
-    .add(usernameModifier)
-    .add(usernameSurface)
-
-  currencyModal
-    .add(submitModifier)
-    .add(submitSurface);
-
-  this.modal = currencyModal;
+  this.modal = loginModal;
 
   Timer.after(function() {
-    currencyModal.show(function() {
+    loginModal.show(function() {
       console.log("showed currency modal");
     });
   }, 1);
-
-  this.submitSurface = submitSurface;
 }
 
 HomeView.prototype = Object.create(BaseView.prototype);
